@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Komplain — Admin Panel Plaza BPJamsostek</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" href="../assets/favicon-32.png" sizes="32x32">
+<link rel="stylesheet" href="../css/fonts.css">
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/pages.css">
+<link rel="stylesheet" href="../css/admin.css">
+</head>
+<body class="admin-body">
+
+<div class="admin-shell">
+  <div class="admin-sidebar-backdrop" id="adminSidebarBackdrop"></div>
+  <aside class="admin-sidebar" id="adminSidebar">
+    <div class="admin-sidebar-brand">
+      <img src="../assets/logo.png" alt="Logo">
+      <span>PLAZA BPJAMSOSTEK<em>ADMIN PANEL</em></span>
+    </div>
+    <nav class="admin-nav">
+      <div class="admin-nav-group">
+        <div class="admin-nav-label">Utama</div>
+        <a href="index.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>Dashboard</a>
+      </div>
+      <div class="admin-nav-group">
+        <div class="admin-nav-label">Foodcourt</div>
+        <a href="foodcourt.html"><svg viewBox="0 0 24 24"><path d="M5 4v8a3 3 0 0 0 3 3v7M5 4a2 2 0 0 0-2 2M8 4v8M11 4v8M17 4c-2 0-3 2-3 5v3h6v-3c0-3-1-5-3-5Zm0 8v8" stroke-linecap="round" stroke-linejoin="round"/></svg>Tenant &amp; Menu</a>
+        <a href="orders.html"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2 3h2l2.4 12.2a2 2 0 0 0 2 1.8h8.6a2 2 0 0 0 2-1.6L21 7H6" stroke-linecap="round" stroke-linejoin="round"/></svg>Pesanan</a>
+      </div>
+      <div class="admin-nav-group">
+        <div class="admin-nav-label">Layanan</div>
+        <a href="complaints.html" class="active"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10Z" stroke-linecap="round" stroke-linejoin="round"/></svg>Komplain</a>
+      </div>
+    </nav>
+    <div class="admin-sidebar-foot">
+      <div class="admin-user">
+        <div class="admin-user-avatar" id="adminUserAvatar">A</div>
+        <div><div class="admin-user-name" id="adminUserName">—</div><div class="admin-user-role" id="adminUserRole">—</div></div>
+      </div>
+      <button class="admin-logout" id="adminLogoutBtn">Keluar</button>
+    </div>
+  </aside>
+
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button class="admin-sidebar-toggle" id="sidebarToggle">☰</button>
+        <h1>Manajemen Komplain</h1>
+      </div>
+    </div>
+    <div class="admin-content">
+      <div class="admin-panel">
+        <div class="admin-panel-head">
+          <h3>Semua Komplain</h3>
+          <select id="statusFilter" style="padding:8px 12px;border-radius:8px;border:1px solid var(--line);font-size:13px;">
+            <option value="all">Semua Status</option>
+            <option value="submitted">Baru Masuk</option>
+            <option value="in_progress">Sedang Diproses</option>
+            <option value="resolved">Terselesaikan</option>
+            <option value="closed">Ditutup</option>
+          </select>
+        </div>
+        <div class="admin-table-wrap"><table class="admin-table">
+          <thead><tr><th>No. Komplain</th><th>Nama</th><th>Subjek</th><th>Kategori</th><th>Status</th><th>Waktu</th><th>Aksi</th></tr></thead>
+          <tbody id="complaintsBody"><tr class="admin-empty-row"><td colspan="7">Memuat...</td></tr></tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== COMPLAINT DETAIL MODAL ===== -->
+<div class="modal" id="complaintDetailModal" role="dialog" aria-modal="true">
+  <div class="modal-backdrop"></div>
+  <div class="modal-panel admin-modal-panel" style="max-width:640px;">
+    <button class="modal-close" aria-label="Tutup">&times;</button>
+    <div class="admin-form-body">
+      <h3 style="font-family:var(--display);margin:0 0 4px;" id="cdSubject">—</h3>
+      <p class="muted" style="font-size:13px;margin-bottom:14px;" id="cdMeta">—</p>
+      <p style="font-size:13.5px;line-height:1.6;margin-bottom:14px;" id="cdDescription"></p>
+      <div class="photo-thumb-row" id="cdPhotos"></div>
+
+      <div class="field-row">
+        <div class="field">
+          <label>Status</label>
+          <select id="cdStatusSelect">
+            <option value="submitted">Baru Masuk</option>
+            <option value="in_progress">Sedang Diproses</option>
+            <option value="resolved">Terselesaikan</option>
+            <option value="closed">Ditutup</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Ditugaskan ke</label>
+          <input type="text" id="cdAssignee" placeholder="Nama staf / divisi">
+        </div>
+      </div>
+      <button type="button" class="btn btn-outline btn-sm" id="cdSaveBtn" style="margin-bottom:20px;">Simpan Status &amp; Penugasan</button>
+
+      <hr class="divider" style="margin:16px 0;">
+      <h4 style="font-family:var(--display);font-size:14px;margin:0 0 10px;">Riwayat Respons</h4>
+      <div class="chat-thread" id="cdResponses"></div>
+      <div class="field">
+        <label>Tambah Respons</label>
+        <textarea id="cdNewResponse" rows="3" placeholder="Tulis tanggapan untuk komplain ini..."></textarea>
+      </div>
+      <button type="button" class="btn btn-primary btn-sm full" id="cdSendResponseBtn">Kirim Respons</button>
+    </div>
+  </div>
+</div>
+
+<div class="admin-toast" id="adminToast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/supabase-config.js"></script>
+<script src="../js/supabase-client.js"></script>
+<script src="../js/admin/auth-guard.js"></script>
+<script src="../js/admin/admin-common.js"></script>
+<script src="../js/admin/complaints-admin.js"></script>
+</body>
+</html>

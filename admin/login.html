@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Login — Plaza BPJamsostek</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" href="../assets/favicon-32.png" sizes="32x32">
+<link rel="stylesheet" href="../css/fonts.css">
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/admin.css">
+</head>
+<body class="admin-body">
+
+<div class="admin-login-wrap">
+  <div class="hex-pattern-svg" style="opacity:.08;"></div>
+  <div class="admin-login-card">
+    <div class="admin-login-brand">
+      <img src="../assets/logo.png" alt="Logo Plaza BPJamsostek">
+      <span>PLAZA BPJAMSOSTEK<em>ADMIN PANEL</em></span>
+    </div>
+    <h1>Masuk ke Admin Panel</h1>
+    <p class="sub">Kelola konten website, foodcourt, pesanan, dan komplain.</p>
+
+    <div class="admin-config-warning" id="configWarning" style="display:none;">
+      Backend belum dikonfigurasi. Lihat <code>SUPABASE_SETUP.md</code> di folder utama
+      website, lalu isi <code>js/supabase-config.js</code> dengan kredensial Supabase Anda.
+    </div>
+
+    <div class="admin-error" id="loginError"></div>
+
+    <form id="loginForm">
+      <div class="field">
+        <label>Email</label>
+        <input type="email" id="loginEmail" required autocomplete="username">
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <div class="pw-field-wrap">
+          <input type="password" id="loginPassword" required autocomplete="current-password">
+          <button type="button" class="pw-toggle-btn" id="pwToggleBtn" aria-label="Tampilkan password">
+            <svg viewBox="0 0 24 24" width="18" height="18"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary full" id="loginBtn">Masuk</button>
+    </form>
+
+    <div class="admin-login-foot">
+      <a href="../index.html">&larr; Kembali ke Website</a>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/supabase-config.js"></script>
+<script src="../js/supabase-client.js"></script>
+<script>
+  const S = window.PlazaSupabase;
+  if (!S || !S.isConfigured) {
+    document.getElementById('configWarning').style.display = 'block';
+  } else {
+    // If already logged in, skip straight to dashboard.
+    S.getSession().then((session) => { if (session) window.location.href = 'index.html'; });
+  }
+
+  document.getElementById('pwToggleBtn').addEventListener('click', () => {
+    const input = document.getElementById('loginPassword');
+    const isPw = input.type === 'password';
+    input.type = isPw ? 'text' : 'password';
+    document.getElementById('pwToggleBtn').classList.toggle('is-visible', isPw);
+  });
+
+  document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const errEl = document.getElementById('loginError');
+    const btn = document.getElementById('loginBtn');
+    errEl.classList.remove('show');
+    if (!S || !S.isConfigured) {
+      errEl.textContent = 'Backend belum dikonfigurasi — lihat SUPABASE_SETUP.md.';
+      errEl.classList.add('show');
+      return;
+    }
+    btn.disabled = true;
+    btn.textContent = 'Memproses...';
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    const { data, error } = await S.signIn(email, password);
+    btn.disabled = false;
+    btn.textContent = 'Masuk';
+    if (error) {
+      errEl.textContent = 'Email atau password salah, atau akun belum terdaftar sebagai admin.';
+      errEl.classList.add('show');
+      return;
+    }
+    const profile = await S.getProfile(data.user.id);
+    if (!profile) {
+      errEl.textContent = 'Akun ini belum diberi akses admin. Lihat Langkah 5 di SUPABASE_SETUP.md.';
+      errEl.classList.add('show');
+      await S.signOut();
+      return;
+    }
+    window.location.href = 'index.html';
+  });
+</script>
+</body>
+</html>

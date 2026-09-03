@@ -1,0 +1,28 @@
+/* =================================================================
+   SELF-HOSTED VARIABLE FONTS
+   Sora, Inter and Fraunces (Italic) — sourced from Google Fonts'
+   open-source (OFL) repository and bundled locally so the site has
+   no external font CDN dependency (faster, more private, works
+   offline once cached).
+   ================================================================= */
+@font-face{
+  font-family:'Sora';
+  src:url('../assets/fonts/Sora.woff2') format('woff2-variations'), url('../assets/fonts/Sora.woff2') format('woff2');
+  font-weight:100 900;
+  font-style:normal;
+  font-display:swap;
+}
+@font-face{
+  font-family:'Inter';
+  src:url('../assets/fonts/Inter.woff2') format('woff2-variations'), url('../assets/fonts/Inter.woff2') format('woff2');
+  font-weight:100 900;
+  font-style:normal;
+  font-display:swap;
+}
+@font-face{
+  font-family:'Fraunces';
+  src:url('../assets/fonts/Fraunces-Italic.woff2') format('woff2-variations'), url('../assets/fonts/Fraunces-Italic.woff2') format('woff2');
+  font-weight:300 700;
+  font-style:italic;
+  font-display:swap;
+}
