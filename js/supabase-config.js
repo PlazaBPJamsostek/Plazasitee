@@ -6,6 +6,6 @@
    breaks, the backend features simply stay in "offline" mode.
    ================================================================= */
 window.PLAZA_SUPABASE_CONFIG = {
-  url: 'https://zohdfmnqcllteuyrvafn.supabase.co/rest/v1/',       // e.g. https://xxxxxxxxxxx.supabase.co
-  anonKey: 'sb_publishable__1y2d1YJ99e-BBOSGIty9w_9ljgW-23', // the "anon / public" key — never the service_role key
+  url: 'https://lqfstpelqkhqxlkmsscd.supabase.co/rest/v1/',       // e.g. https://xxxxxxxxxxx.supabase.co
+  anonKey: 'sb_publishable_DItydnL0ESWpuGlZ0C86jQ_xZI5vVly', // the "anon / public" key — never the service_role key
 };
